@@ -42,6 +42,7 @@ import thingsboardHomeLinks from '../home';
 import thingsboardAdmin from '../admin';
 import thingsboardProfile from '../profile';
 import thingsboardAsset from '../asset';
+import thingsboardAmap from '../amap';
 import thingsboardDevice from '../device';
 import thingsboardWidgetLibrary from '../widget';
 import thingsboardDashboard from '../dashboard';
@@ -72,6 +73,7 @@ export default angular.module('thingsboard.home', [
     thingsboardAdmin,
     thingsboardProfile,
     thingsboardAsset,
+    thingsboardAmap,
     thingsboardDevice,
     thingsboardWidgetLibrary,
     thingsboardDashboard,

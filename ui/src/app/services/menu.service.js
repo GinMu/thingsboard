@@ -300,6 +300,12 @@ function Menu(userService, $state, $rootScope) {
                             type: 'link',
                             state: 'home.dashboards',
                             icon: 'dashboard'
+                        },
+                        {
+                            name: 'amap.amaps',
+                            type: 'link',
+                            state: 'home.amap',
+                            icon: 'dashboard'
                         }];
 
                     homeSections =

@@ -354,6 +354,9 @@ export default function addLocaleChinese(locales) {
             "date-to": "日期到",
             "time-to": "时间到"
         },
+        "amap": {
+            "amaps": '高德地图'
+        },
         "dashboard": {
             "dashboard": "仪表板",
             "dashboards": "仪表板库",

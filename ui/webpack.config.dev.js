@@ -35,6 +35,9 @@ module.exports = {
         publicPath: '/',
         filename: 'bundle.js',
     },
+    externals: {
+        'AMap': 'AMap'
+    },
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
