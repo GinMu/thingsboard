@@ -10,14 +10,13 @@ import AMap from 'AMap';
 
 /*@ngInject*/
 export default function AmapDirective($log) {
-    let amap,
-        geolocation;
     return {
         restrict: "E",
         template: '<div id="amap-container" style="height: 500px;"></div>',
         replace: true,
-        link: function () {
-            amap = new AMap.Map('amap-container');
+        controller: ['$scope', function ($scope) {
+            let amap = new AMap.Map('amap-container');
+            let geolocation;
             amap.plugin('AMap.Geolocation', function () {
                 geolocation = new AMap.Geolocation({
                     enableHighAccuracy: true,//是否使用高精度定位，默认:true
@@ -37,13 +36,11 @@ export default function AmapDirective($log) {
                 geolocation.on('complete', onComplete);//返回定位信息
                 geolocation.on('error', onError);      //返回定位出错信息
             });
-        },
-        controller: ['$scope', function ($scope) {
             $scope.$on("$destroy", function () {
                 if (amap) {
                     amap.destroy();
                     amap = null;
-                }
+                }            
                 if (geolocation) {
                     geolocation.off('complete', onComplete);
                     geolocation.off('error', onError);
