@@ -137,31 +137,31 @@ function Menu(userService, $state, $rootScope) {
                                 }
                             ]
                         },
-                            {
-                                name: 'widget.management',
-                                places: [
-                                    {
-                                        name: 'widget.widget-library',
-                                        icon: 'now_widgets',
-                                        state: 'home.widgets-bundles'
-                                    }
-                                ]
-                            },
-                            {
-                                name: 'admin.system-settings',
-                                places: [
-                                    {
-                                        name: 'admin.general',
-                                        icon: 'settings_applications',
-                                        state: 'home.settings.general'
-                                    },
-                                    {
-                                        name: 'admin.outgoing-mail',
-                                        icon: 'mail',
-                                        state: 'home.settings.outgoing-mail'
-                                    }
-                                ]
-                            }];
+                        {
+                            name: 'widget.management',
+                            places: [
+                                {
+                                    name: 'widget.widget-library',
+                                    icon: 'now_widgets',
+                                    state: 'home.widgets-bundles'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'admin.system-settings',
+                            places: [
+                                {
+                                    name: 'admin.general',
+                                    icon: 'settings_applications',
+                                    state: 'home.settings.general'
+                                },
+                                {
+                                    name: 'admin.outgoing-mail',
+                                    icon: 'mail',
+                                    state: 'home.settings.outgoing-mail'
+                                }
+                            ]
+                        }];
                 } else if (authority === 'TENANT_ADMIN') {
                     sections = [
                         {
@@ -239,41 +239,41 @@ function Menu(userService, $state, $rootScope) {
                                 }
                             ]
                         },
-                            {
-                                name: 'asset.management',
-                                places: [
-                                    {
-                                        name: 'asset.assets',
-                                        icon: 'domain',
-                                        state: 'home.assets'
-                                    }
-                                ]
-                            },
-                            {
-                                name: 'device.management',
-                                places: [
-                                    {
-                                        name: 'device.devices',
-                                        icon: 'devices_other',
-                                        state: 'home.devices'
-                                    }
-                                ]
-                            },
-                            {
-                                name: 'dashboard.management',
-                                places: [
-                                    {
-                                        name: 'widget.widget-library',
-                                        icon: 'now_widgets',
-                                        state: 'home.widgets-bundles'
-                                    },
-                                    {
-                                        name: 'dashboard.dashboards',
-                                        icon: 'dashboard',
-                                        state: 'home.dashboards'
-                                    }
-                                ]
-                            }];
+                        {
+                            name: 'asset.management',
+                            places: [
+                                {
+                                    name: 'asset.assets',
+                                    icon: 'domain',
+                                    state: 'home.assets'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'device.management',
+                            places: [
+                                {
+                                    name: 'device.devices',
+                                    icon: 'devices_other',
+                                    state: 'home.devices'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'dashboard.management',
+                            places: [
+                                {
+                                    name: 'widget.widget-library',
+                                    icon: 'now_widgets',
+                                    state: 'home.widgets-bundles'
+                                },
+                                {
+                                    name: 'dashboard.dashboards',
+                                    icon: 'dashboard',
+                                    state: 'home.dashboards'
+                                }
+                            ]
+                        }];
 
                 } else if (authority === 'CUSTOMER_USER') {
                     sections = [
@@ -329,16 +329,26 @@ function Menu(userService, $state, $rootScope) {
                                 }
                             ]
                         },
-                            {
-                                name: 'dashboard.view-dashboards',
-                                places: [
-                                    {
-                                        name: 'dashboard.dashboards',
-                                        icon: 'dashboard',
-                                        state: 'home.dashboards'
-                                    }
-                                ]
-                            }];
+                        {
+                            name: 'dashboard.view-dashboards',
+                            places: [
+                                {
+                                    name: 'dashboard.dashboards',
+                                    icon: 'dashboard',
+                                    state: 'home.dashboards'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'amap.view-amaps',
+                            places: [
+                                {
+                                    name: 'amap.amaps',
+                                    icon: 'dashboard',
+                                    state: 'home.amap'
+                                }
+                            ]
+                        }];
                 }
             }
         }
