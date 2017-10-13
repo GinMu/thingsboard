@@ -17,8 +17,11 @@ export default function AmapRoutes($stateProvider) {
                     controllerAs: 'vm'
                 }
             },
+            data: {
+                pageTitle: 'amap.amaps'
+            },
             ncyBreadcrumb: {
-                label: '{"icon": "devices_other", "label": "高德地图", "translate": "false"}'
+                label: '{"icon": "map", "label": "amap.amaps"}'
             }
         })
 

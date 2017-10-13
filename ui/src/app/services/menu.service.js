@@ -305,7 +305,7 @@ function Menu(userService, $state, $rootScope) {
                             name: 'amap.amaps',
                             type: 'link',
                             state: 'home.amap',
-                            icon: 'dashboard'
+                            icon: 'map'
                         }];
 
                     homeSections =
@@ -344,7 +344,7 @@ function Menu(userService, $state, $rootScope) {
                             places: [
                                 {
                                     name: 'amap.amaps',
-                                    icon: 'dashboard',
+                                    icon: 'map',
                                     state: 'home.amap'
                                 }
                             ]
