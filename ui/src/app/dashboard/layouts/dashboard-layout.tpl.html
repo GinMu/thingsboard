@@ -34,6 +34,7 @@
             {{ 'dashboard.add-widget' | translate }}
         </md-button>
     </section>
+    <!-- 向tbDashboard传递widgets参数 -->
     <tb-dashboard
             dashboard-style="{'background-color': vm.layoutCtx.gridSettings.backgroundColor,
                             'background-image': 'url('+vm.layoutCtx.gridSettings.backgroundImageUrl+')',
@@ -41,6 +42,7 @@
                             'background-attachment': 'scroll',
                             'background-size': vm.layoutCtx.gridSettings.backgroundSizeMode || '100%',
                             'background-position': '0% 0%'}"
+            
             widgets="vm.layoutCtx.widgets"
             widget-layouts="vm.layoutCtx.widgetLayouts"
             columns="vm.layoutCtx.gridSettings.columns"

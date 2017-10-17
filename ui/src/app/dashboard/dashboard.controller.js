@@ -78,6 +78,7 @@ export default function DashboardController(types, utils, dashboardUtils, widget
         set: function() { }
     });
 
+    // widgets定义处
     vm.layouts = {
         main: {
             show: false,
@@ -359,6 +360,8 @@ export default function DashboardController(types, utils, dashboardUtils, widget
             parentScope.$root.$broadcast('widgetEditModeInited');
             parentScope.$root.$apply();
         } else {
+
+            // 获取dashboard详情
             dashboardService.getDashboard($stateParams.dashboardId)
                 .then(function success(dashboard) {
                     vm.dashboard = dashboardUtils.validateAndUpdateDashboard(dashboard);
@@ -376,7 +379,7 @@ export default function DashboardController(types, utils, dashboardUtils, widget
     function openDashboardState(state, openRightLayout) {
         
         // 显示dashboard widget详情
-        $log.log('显示dashboard详情：', state, openRightLayout);
+        $log.log('显示dashboard详情：');
         var layoutsData = dashboardUtils.getStateLayoutsData(vm.dashboard, state);
         $log.log('layoutsData：', layoutsData);
         if (layoutsData) {

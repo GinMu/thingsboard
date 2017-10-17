@@ -65,6 +65,8 @@ function Widget($controller, $log, widgetService) {
             //var progressScope = scope.$new();
             //$compile(elem.contents())(progressScope);
 
+            // 加载widget信息
+            $log.log('加载widget信息：', widget);
             widgetService.getWidgetInfo(widget.bundleAlias, widget.typeAlias, widget.isSystemType).then(
                 function(widgetInfo) {
                     loadFromWidgetInfo(widgetInfo);
@@ -86,6 +88,8 @@ function Widget($controller, $log, widgetService) {
                 elem.addClass(widgetNamespace);
 
                 var widgetType = widgetService.getWidgetTypeFunction(widget.bundleAlias, widget.typeAlias, widget.isSystemType);
+
+                $log.log('widgetType：', widgetType);                
 
                 angular.extend(locals, {$scope: scope, $element: elem, widgetInfo: widgetInfo, widgetType: widgetType});
 

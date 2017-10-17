@@ -26,8 +26,6 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
 
     var vm = this;
 
-    $log.log('widgetType：', widgetType);
-
     $scope.$timeout = $timeout;
     $scope.$q = $q;
     $scope.$injector = $injector;

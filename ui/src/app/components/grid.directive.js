@@ -206,6 +206,7 @@ function GridController($scope, $state, $mdDialog, $document, $q, $mdUtil, $time
             }
         },
 
+        // 获取dashboard、device、asset等列表
         fetchMoreItems_: function () {
             if (vm.items.hasNext && !vm.items.pending) {
                 var promise = vm.fetchItemsFunc(vm.items.nextPageLink, $scope.searchConfig.searchEntitySubtype);
