@@ -26,6 +26,8 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
 
     var vm = this;
 
+    $log.log('widgetType：', widgetType);
+
     $scope.$timeout = $timeout;
     $scope.$q = $q;
     $scope.$injector = $injector;
@@ -173,6 +175,7 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
 
     try {
         widgetTypeInstance = new widgetType(widgetContext);
+        $log.log('widgetTypeInstance：', widgetTypeInstance);
     } catch (e) {
         handleWidgetException(e);
         widgetTypeInstance = {};
@@ -707,6 +710,8 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
     }
 
     function onInit(skipSizeCheck) {
+
+        $log.log('init widget');
         if (!widgetContext.$containerParent) {
             return;
         }
@@ -716,11 +721,17 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
         if (!widgetContext.inited && isReady()) {
             widgetContext.inited = true;
             try {
+                // 显示widget
+                // 函数在cql文件里
+                $log.log('显示widget');
                 widgetTypeInstance.onInit();
             } catch (e) {
                 handleWidgetException(e);
             }
             if (!vm.typeParameters.useCustomDatasources && widgetContext.defaultSubscription) {
+
+                // widget显示数据
+                $log.log('widget显示数据');
                 widgetContext.defaultSubscription.subscribe();
             }
         }
@@ -730,7 +741,7 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
         var width = widgetContext.$containerParent.width();
         var height = widgetContext.$containerParent.height();
         var sizeChanged = false;
-
+        
         if (!widgetContext.width || widgetContext.width != width || !widgetContext.height || widgetContext.height != height) {
             if (width > 0 && height > 0) {
                 widgetContext.$container.css('height', height + 'px');

@@ -48,6 +48,7 @@ function Widget($controller, $log, widgetService) {
                 }
             });*/
 
+            // angular-gridster事件
             scope.$on('gridster-item-initialized', function (event, item) {
                 gridsterItem = item;
                 if (widgetController) {
@@ -90,6 +91,7 @@ function Widget($controller, $log, widgetService) {
 
                 widgetController = $controller('WidgetController', locals);
 
+                $log.log('gridsterItem：', gridsterItem);
                 if (gridsterItem) {
                     // 初始化widget
                     widgetController.gridsterItemInitialized(gridsterItem);
