@@ -29,7 +29,7 @@ import AliasController from '../api/alias-controller';
 /*@ngInject*/
 export default function DashboardController(types, utils, dashboardUtils, widgetService, userService,
                                             dashboardService, timeService, entityService, itembuffer, importExport, hotkeys, $window, $rootScope,
-                                            $scope, $element, $state, $stateParams, $mdDialog, $mdMedia, $timeout, $document, $q, $translate, $filter) {
+                                            $scope, $element, $state, $stateParams, $mdDialog, $mdMedia, $timeout, $document, $q, $translate, $log, $filter) {
 
     var vm = this;
 
@@ -374,7 +374,11 @@ export default function DashboardController(types, utils, dashboardUtils, widget
     }
 
     function openDashboardState(state, openRightLayout) {
+        
+        // 显示dashboard widget详情
+        $log.log('显示dashboard详情：', state, openRightLayout);
         var layoutsData = dashboardUtils.getStateLayoutsData(vm.dashboard, state);
+        $log.log('layoutsData：', layoutsData);
         if (layoutsData) {
             vm.dashboardCtx.state = state;
             vm.dashboardCtx.aliasController.dashboardStateChanged();

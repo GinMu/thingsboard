@@ -28,7 +28,7 @@ export default angular.module('thingsboard.directives.widget', [thingsboardLegen
     .name;
 
 /*@ngInject*/
-function Widget($controller, widgetService) {
+function Widget($controller, $log, widgetService) {
     return {
         scope: true,
         link: function (scope, elem, attrs) {
@@ -36,6 +36,7 @@ function Widget($controller, widgetService) {
             var locals = scope.$eval(attrs.locals);
             var widget = locals.widget;
 
+            $log.log('widget：', locals);
             var widgetController;
             var gridsterItem;
 
@@ -71,6 +72,8 @@ function Widget($controller, widgetService) {
 
             function loadFromWidgetInfo(widgetInfo) {
 
+                $log.log('widget信息：', widgetInfo);
+
                 scope.loadingData = true;
 
                 elem.addClass("tb-widget");
@@ -88,6 +91,7 @@ function Widget($controller, widgetService) {
                 widgetController = $controller('WidgetController', locals);
 
                 if (gridsterItem) {
+                    // 初始化widget
                     widgetController.gridsterItemInitialized(gridsterItem);
                 }
             }
