@@ -27,6 +27,7 @@ const config = require('./webpack.config');
 const express = require('express');
 const http = require('http');
 const httpProxy = require('http-proxy');
+// const forwardHost = 'demo.thingsboard.io';
 const forwardHost = '106.15.231.113';
 const forwardPort = 8080;
 

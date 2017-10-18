@@ -24,6 +24,7 @@ import {processPattern, arraysEqual, toLabelValueMap, fillPattern, fillPatternWi
 
 export default class TbMapWidgetV2 {
     constructor(mapProvider, drawRoutes, ctx, useDynamicLocations, $element) {
+        // var $log = ctx.$scope.$injector.get('$log');
         var tbMap = this;
         this.ctx = ctx;
         this.mapProvider = mapProvider;
