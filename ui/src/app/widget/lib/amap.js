@@ -21,7 +21,6 @@ export default class TbAMap {
         this.ctx = ctx;
         this.scope = ctx.$scope;
         this.geolocation = null;
-        this.init();
         this.scope.$on("$destroy", () => {
             console.log('销毁Amap地图'); //eslint-disable-line
             if (this.amap) {

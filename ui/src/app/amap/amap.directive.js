@@ -16,9 +16,10 @@ export default function AmapDirective() {
         replace: true,
         link: function (scope, element, attrs) { //eslint-disable-line
             var ctx = {
-                $scope: scope.$new()
+                $scope: scope.$new(),
+                $container: element
             }
-            var map = new TbAMap(element[0], ctx);
+            var map = new TbAMap(ctx);
             map.init();
         }
     };

@@ -178,6 +178,7 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
 
         self.onInit = function() {
             self.ctx.map = new TbAMap(self.ctx) //eslint-disable-line
+            self.ctx.map.init();
         }
     }
 
