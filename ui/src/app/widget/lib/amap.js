@@ -9,12 +9,19 @@ import AMap from 'AMap';
 
 export default class TbAMap {
 
-    constructor(container, ctx) {
-        this.amap = new AMap.Map(container);
+    constructor(ctx, $element) {
+
+        if (!$element) {
+            $element = ctx.$container;
+        }
+
+        console.log('element:', $element)//eslint-disable-line
+
+        this.amap = new AMap.Map($element[0]);
         this.ctx = ctx;
         this.scope = ctx.$scope;
         this.geolocation = null;
-
+        this.init();
         this.scope.$on("$destroy", () => {
             console.log('销毁Amap地图'); //eslint-disable-line
             if (this.amap) {
