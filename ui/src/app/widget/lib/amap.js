@@ -3,29 +3,29 @@
  * Gin Mu
  * 高德地图
  */
-/* eslint-disable import/no-unresolved, import/default */
-
+/* eslint-disable */
+import './amap.scss';
 import AMap from 'AMap';
 
 export default class TbAMap {
 
-    constructor(ctx, $element) {
+    constructor(ctx, $element, initCallback, defaultZoomLevel, dontFitMapBounds, minZoomLevel) {
 
-        if (!$element) {
-            $element = ctx.$container;
-        }
-
-        console.log('element:', $element)//eslint-disable-line
-
-        this.amap = new AMap.Map($element[0]);
+        this.map = new AMap.Map($element[0], {
+            animateEnable: false
+        });
+        this.defaultZoomLevel = defaultZoomLevel;
+        this.dontFitMapBounds = dontFitMapBounds;
+        this.minZoomLevel = minZoomLevel;
+        this.tooltips = [];
         this.ctx = ctx;
         this.scope = ctx.$scope;
         this.geolocation = null;
         this.scope.$on("$destroy", () => {
-            console.log('销毁Amap地图'); //eslint-disable-line
-            if (this.amap) {
-                this.amap.destroy();
-                this.amap = null;
+            console.log('销毁Amap地图');
+            if (this.map) {
+                this.map.destroy();
+                this.map = null;
             }
             if (this.geolocation) {
                 this.geolocation.off('complete', this.onComplete);
@@ -33,10 +33,14 @@ export default class TbAMap {
                 this.geolocation = null;
             }
         });
+
+        if (initCallback) {
+            setTimeout(initCallback, 0);
+        }
     }
 
     init() {
-        this.amap.plugin('AMap.Geolocation', () => {
+        this.map.plugin('AMap.Geolocation', () => {
             this.geolocation = new AMap.Geolocation({
                 enableHighAccuracy: true,//是否使用高精度定位，默认:true
                 timeout: 10000,          //超过10秒后停止定位，默认：无穷大
@@ -50,7 +54,7 @@ export default class TbAMap {
                 panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
                 zoomToAccuracy: true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
             });
-            this.amap.addControl(this.geolocation);
+            this.map.addControl(this.geolocation);
             this.geolocation.getCurrentPosition();
             this.geolocation.on('complete', this.onComplete.bind(this));//返回定位信息
             this.geolocation.on('error', this.onError.bind(this));//定位出错
@@ -63,6 +67,225 @@ export default class TbAMap {
 
     onError(err) {
         console.log(err) //eslint-disable-line
+    }
+
+
+    inited() {
+        return angular.isDefined(this.map);
+    }
+
+    updateMarkerLabel(marker, settings) {
+        console.log('更新markerLabel：', marker, settings);
+        marker.setContent('<div style="color: '+ settings.labelColor +';"><b>'+settings.labelText+'</b></div>');
+    }
+
+    updateMarkerColor(marker, color) {
+        console.log('更新markerColor：', marker, color);
+
+        var pinColor = color.substr(1);
+        var icon = new AMap.Icon({
+            image: 'http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png',
+            size: new AMap.Size(21, 34)
+        });
+        marker.setIcon(icon);
+    }
+
+    updateMarkerImage(marker, settings, image, maxSize) {
+        console.log('更新markerImage', marker, settings);
+        console.log('更新markerImage', image, maxSize);
+        var testImage = document.createElement('img'); // eslint-disable-line
+        testImage.style.visibility = 'hidden';
+        testImage.onload = function() {
+            var width;
+            var height;
+            var aspect = testImage.width / testImage.height;
+            document.body.removeChild(testImage); //eslint-disable-line
+            if (aspect > 1) {
+                width = maxSize;
+                height = maxSize / aspect;
+            } else {
+                width = maxSize * aspect;
+                height = maxSize;
+            }
+            var pinImage = new AMap.Icon({
+                image: image,
+                size: new AMap.Size(width, height)
+            });
+            marker.setIcon(pinImage);
+            if (settings.showLabel) {
+                
+            }
+        }
+        document.body.appendChild(testImage); //eslint-disable-line
+        testImage.src = image;
+    }
+
+    createMarker(location, settings, onClickListener, markerArgs) {
+        console.log('创建marker:', location, settings, onClickListener, markerArgs);
+
+
+        var height = 34;
+        var pinColor = settings.color.substr(1);
+
+        var icon = new AMap.Icon({
+            image: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b1.png'
+        });
+
+        var marker = new AMap.Marker({
+            icon: icon,
+            position: location,
+            map: this.map
+        });
+
+        if (settings.showLabel) {
+            marker.setLabel({
+                offset: new AMap.Pixel(-10, -height + 10),
+                content: '<div style="color: ' + settings.labelColor + ';"><b>' + settings.labelText + '</b></div>'
+            });
+        }
+
+        if (settings.useMarkerImage) {
+            this.updateMarkerImage(marker, settings, settings.markerImage, settings.markerImageSize || 34);
+        }
+
+        if (settings.displayTooltip) {
+            this.createTooltip(marker, settings.tooltipPattern, settings.tooltipReplaceInfo, settings.autocloseTooltip, markerArgs);
+        }
+
+        if (onClickListener) {
+            marker.on('click', onClickListener);
+        }
+
+        return marker;
+    }
+
+    removeMarker(marker) {
+        console.log('删除marker:', marker);
+        marker.setMap(null);
+    }
+
+
+    createTooltip(marker, pattern, replaceInfo, autoClose, markerArgs) {
+        console.log('创建tooltip:', marker, pattern, replaceInfo, autoClose, markerArgs);
+
+        var popup = new AMap.InfoWindow({
+            content: ''
+        });
+        marker.on('click', () => {
+            if (autoClose) {
+                this.tooltips.forEach((tooltip) => {
+                    tooltip.popup.close();
+                });
+            }
+            popup.open(this.map, marker.getPosition());
+        });
+        this.tooltips.push({
+            markerArgs: markerArgs,
+            popup: popup,
+            pattern: pattern,
+            replaceInfo: replaceInfo
+        });
+    }
+
+    updatePolylineColor(polyline, settings, color) {
+        console.log('更新polylinecolor:', polyline, settings, color);
+        var options = {
+            path: polyline.getPath(),
+            strokeColor: color,
+            strokeOpacity: settings.strokeOpacity,
+            strokeWeight: settings.strokeWeight,
+            map: this.map
+        };
+        polyline.setOptions(options);
+    }
+
+    createPolyline(locations, settings) {
+        console.log('创建polyline:', locations, settings);
+        var polyline = new AMap.Polyline({
+            path: locations,
+            strokeColor: settings.color,
+            strokeOpacity: settings.strokeOpacity,
+            strokeWeight: settings.strokeWeight,
+            map: this.map
+        });
+
+        return polyline;
+    }
+
+
+    removePolyline(polyline) {
+        console.log('删除polyline:', polyline);
+        polyline.setMap(null);
+    }
+
+
+    fitBounds(bounds) {
+        console.log('fitbounds:', bounds);
+        if (this.dontFitMapBounds && this.defaultZoomLevel) {
+            this.map.setZoom(this.defaultZoomLevel);
+            console.log('地图中心：', bounds.getCenter());
+            let latLng = bounds.getCenter();
+            this.map.panTo(latLng);
+        } else {
+            AMap.event.addListenerOnce(this.map, 'zoomend', () => {
+                console.log('地图变化');
+                if (!this.defaultZoomLevel && this.map.getZoom() > this.minZoomLevel) {
+                    this.map.setZoom(this.minZoomLevel);
+                }
+            });
+            this.map.setBounds(bounds);
+        }
+    }
+
+
+    createLatLng(lat, lng) {
+        return new AMap.LngLat(lng, lat);
+    }
+
+    extendBoundsWithMarker(bounds, marker) {
+        console.log('extendBoundsWithMarker:', bounds, marker);
+        bounds.extend(marker.getPosition());
+    }
+
+    getMarkerPosition(marker) {
+        console.log('获取marker位置：', marker);
+        return marker.getPosition();
+    }
+
+    setMarkerPosition(marker, latLng) {
+        console.log('设置marker位置：', marker, latLng);
+        marker.setPosition(latLng);
+    }
+
+    getPolylineLatLngs(polyline) {
+        console.log('获取polylinelatlngs:', polyline);
+        return polyline.getPath();
+    }
+
+    setPolylineLatLngs(polyline, latLngs) {
+        console.log('设置polylinelatlngs:', polyline, latLngs);
+        polyline.setPath(latLngs);
+    }
+
+    createBounds() {
+        console.log('创建bounds:');
+        return this.map.getBounds();
+    }
+
+    extendBounds(bounds, polyline) {
+        console.log('扩展bounds:', bounds, polyline);
+        if (polyline && polyline.getPath()) {
+            bounds.extend(polyline.getBounds());
+        }
+    }
+
+    invalidateSize() {
+        AMap.event.trigger(this.map, "resize");
+    }
+
+    getTooltips() {
+        console.log('获取tooltips');
+        return this.tooltips;
     }
 
 
