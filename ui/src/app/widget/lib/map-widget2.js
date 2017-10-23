@@ -19,6 +19,7 @@ import tinycolor from 'tinycolor2';
 import TbGoogleMap from './google-map';
 import TbOpenStreetMap from './openstreet-map';
 import TbImageMap from './image-map';
+import TbAMap from './amap';
 
 import {processPattern, arraysEqual, toLabelValueMap, fillPattern, fillPatternWithActions} from './widget-utils';
 
@@ -85,6 +86,9 @@ export default class TbMapWidgetV2 {
                 settings.posFunction,
                 settings.imageEntityAlias,
                 settings.imageUrlAttribute);
+        } else if (mapProvider === 'amap') {
+            this.map = new TbAMap(this.ctx, $element, initCallback, this.defaultZoomLevel, this.dontFitMapBounds, minZoomLevel);
+            this.map.init();
         }
     }
 

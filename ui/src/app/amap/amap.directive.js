@@ -15,12 +15,12 @@ export default function AmapDirective() {
         template: '<div style="height: 500px;"></div>',
         replace: true,
         link: function (scope, element, attrs) { //eslint-disable-line
-            var ctx = {
-                $scope: scope.$new(),
-                $container: element
-            }
-            var map = new TbAMap(ctx);
+            var map = new TbAMap(element);
             map.init();
+
+            scope.$on('$destroy', () => {
+                map.destroy();
+            })
         }
     };
 }

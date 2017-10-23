@@ -9,7 +9,7 @@ import AMap from 'AMap';
 
 export default class TbAMap {
 
-    constructor(ctx, $element, initCallback, defaultZoomLevel, dontFitMapBounds, minZoomLevel) {
+    constructor($element, initCallback, defaultZoomLevel, dontFitMapBounds, minZoomLevel) {
 
         this.map = new AMap.Map($element[0], {
             animateEnable: false
@@ -18,21 +18,7 @@ export default class TbAMap {
         this.dontFitMapBounds = dontFitMapBounds;
         this.minZoomLevel = minZoomLevel;
         this.tooltips = [];
-        this.ctx = ctx;
-        this.scope = ctx.$scope;
         this.geolocation = null;
-        this.scope.$on("$destroy", () => {
-            console.log('销毁Amap地图');
-            if (this.map) {
-                this.map.destroy();
-                this.map = null;
-            }
-            if (this.geolocation) {
-                this.geolocation.off('complete', this.onComplete);
-                this.geolocation.off('error', this.onError);
-                this.geolocation = null;
-            }
-        });
 
         if (initCallback) {
             setTimeout(initCallback, 0);
@@ -67,6 +53,19 @@ export default class TbAMap {
 
     onError(err) {
         console.log(err) //eslint-disable-line
+    }
+
+    destroy() {
+        console.log('销毁Amap地图');
+        if (this.map) {
+            this.map.destroy();
+            this.map = null;
+        }
+        if (this.geolocation) {
+            this.geolocation.off('complete', this.onComplete);
+            this.geolocation.off('error', this.onError);
+            this.geolocation = null;
+        } 
     }
 
 
