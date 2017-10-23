@@ -139,6 +139,10 @@ function DashboardService($rootScope, $http, $q, $location, customerService) {
         return stDiffPromise;
     }
 
+    /**
+     * 点击每个dashboard获取dashboard信息
+     * @param {*} dashboardId 
+     */
     function getDashboard(dashboardId) {
         var deferred = $q.defer();
         var url = '/api/dashboard/' + dashboardId;
