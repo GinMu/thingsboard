@@ -16,7 +16,8 @@
 /* eslint-disable import/no-commonjs */
 /* eslint-disable global-require */
 /* eslint-disable import/no-nodejs-modules */
-
+/* eslint-disable no-undef */
+/* eslint-disable */
 const path = require('path');
 const webpack = require('webpack');
 const historyApiFallback = require("connect-history-api-fallback");
