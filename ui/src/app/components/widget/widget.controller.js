@@ -172,22 +172,22 @@ export default function WidgetController($scope, $state, $timeout, $window, $ele
     vm.typeParameters = widgetInfo.typeParameters;
 
 
-    function sys_maps_v2_amap(ctx) {
-        var self = this;
-        self.ctx = ctx;
+    // function sys_maps_v2_amap(ctx) {
+    //     var self = this;
+    //     self.ctx = ctx;
 
-        self.onInit = function() {
-            self.ctx.map = new TbAMap(self.ctx) //eslint-disable-line
-            self.ctx.map.init();
-        }
-    }
+    //     self.onInit = function() {
+    //         self.ctx.map = new TbAMap(self.ctx) //eslint-disable-line
+    //         self.ctx.map.init();
+    //     }
+    // }
 
     try {
-        if (widgetType.name === 'sys_maps_v2_openstreetmap') {
-            widgetTypeInstance = new sys_maps_v2_amap(widgetContext); 
-        } else {
+        // if (widgetType.name === 'sys_maps_v2_openstreetmap') {
+        //     widgetTypeInstance = new sys_maps_v2_amap(widgetContext); 
+        // } else {
             widgetTypeInstance = new widgetType(widgetContext);
-        }
+        // }
         
         $log.log('widgetTypeInstance：', widgetTypeInstance);
     } catch (e) {
