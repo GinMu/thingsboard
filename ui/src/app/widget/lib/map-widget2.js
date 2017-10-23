@@ -87,7 +87,7 @@ export default class TbMapWidgetV2 {
                 settings.imageEntityAlias,
                 settings.imageUrlAttribute);
         } else if (mapProvider === 'amap') {
-            this.map = new TbAMap(this.ctx, $element, initCallback, this.defaultZoomLevel, this.dontFitMapBounds, minZoomLevel);
+            this.map = new TbAMap($element, initCallback, this.defaultZoomLevel, this.dontFitMapBounds, minZoomLevel);
             this.map.init();
         }
     }
