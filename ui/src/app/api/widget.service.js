@@ -423,6 +423,10 @@ function WidgetService($rootScope, $http, $q, $filter, $ocLazyLoad, $window, $tr
         return deferred.promise;
     }
 
+    /**
+     * 保存widget bundle
+     * @param {*} widgetsBundle 
+     */
     function saveWidgetsBundle(widgetsBundle) {
         var deferred = $q.defer();
         var url = '/api/widgetsBundle';
@@ -744,6 +748,12 @@ function WidgetService($rootScope, $http, $q, $filter, $ocLazyLoad, $window, $tr
         return deferred.promise;
     }
 
+    /**
+     * 保存widget type
+     * @param {*} widgetInfo 
+     * @param {*} id 
+     * @param {*} bundleAlias 
+     */
     function saveWidgetType(widgetInfo, id, bundleAlias) {
         var deferred = $q.defer();
         var widgetType = toWidgetType(widgetInfo, id, undefined, bundleAlias);
