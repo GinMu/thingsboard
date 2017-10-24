@@ -83,7 +83,7 @@ export default class TbAMap {
 
         var pinColor = color.substr(1);
         var icon = new AMap.Icon({
-            image: 'http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png',
+            image: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
             size: new AMap.Size(21, 34)
         });
         marker.setIcon(icon);
@@ -127,7 +127,7 @@ export default class TbAMap {
         var pinColor = settings.color.substr(1);
 
         var icon = new AMap.Icon({
-            image: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b1.png'
+            image: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
         });
 
         var marker = new AMap.Marker({
