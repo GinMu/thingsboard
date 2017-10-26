@@ -7,6 +7,40 @@
 import './amap.scss';
 import AMap from 'AMap';
 
+AMap.Bounds.prototype.tbExtend = function (obj) {
+    var ne = this.eb,
+        sw = this.mb;
+    var ne2,
+        sw2;
+    if (obj instanceof AMap.Bounds) {
+        ne2 = obj.eb;
+        sw2 = obj.mb;
+        if (!ne2 || !sw2) {
+            return this;
+        }
+    } else if (obj instanceof AMap.LngLat) {
+        ne2 = obj;
+        sw2 = obj;
+    } else {
+        return this;
+    }
+
+    if (!ne || !sw) {
+        this.eb = ne2;
+        this.mb = sw2;
+        this.southwest = this.mb;
+        this.northeast = this.eb;
+    } else {
+        sw.O = sw.lat = Math.min(sw2.lat, sw.lat);
+        sw.M = sw.lng = Math.min(sw2.lng, sw.lng);
+        ne.O = ne.lat = Math.max(ne2.lat, ne.lat);
+        ne.M = ne.lng = Math.max(ne2.lng, ne.lng);
+    }
+    return this;
+}
+
+
+
 export default class TbAMap {
 
     constructor($element, initCallback, defaultZoomLevel, dontFitMapBounds, minZoomLevel) {
@@ -65,7 +99,7 @@ export default class TbAMap {
             this.geolocation.off('complete', this.onComplete);
             this.geolocation.off('error', this.onError);
             this.geolocation = null;
-        } 
+        }
     }
 
 
@@ -75,7 +109,7 @@ export default class TbAMap {
 
     updateMarkerLabel(marker, settings) {
         console.log('更新markerLabel：', marker, settings);
-        marker.setContent('<div style="color: '+ settings.labelColor +';"><b>'+settings.labelText+'</b></div>');
+        marker.setContent('<div style="color: ' + settings.labelColor + ';"><b>' + settings.labelText + '</b></div>');
     }
 
     updateMarkerColor(marker, color) {
@@ -83,8 +117,8 @@ export default class TbAMap {
 
         var pinColor = color.substr(1);
         var icon = new AMap.Icon({
-            image: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-            size: new AMap.Size(21, 34)
+            image: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + pinColor,
+            imageSize: new AMap.Size(21, 34)
         });
         marker.setIcon(icon);
     }
@@ -94,7 +128,7 @@ export default class TbAMap {
         console.log('更新markerImage', image, maxSize);
         var testImage = document.createElement('img'); // eslint-disable-line
         testImage.style.visibility = 'hidden';
-        testImage.onload = function() {
+        testImage.onload = function () {
             var width;
             var height;
             var aspect = testImage.width / testImage.height;
@@ -108,11 +142,12 @@ export default class TbAMap {
             }
             var pinImage = new AMap.Icon({
                 image: image,
-                size: new AMap.Size(width, height)
+                size: new AMap.Size(width, height),
+                imageSize: new AMap.Size(width, height)
             });
             marker.setIcon(pinImage);
             if (settings.showLabel) {
-                
+
             }
         }
         document.body.appendChild(testImage); //eslint-disable-line
@@ -127,7 +162,8 @@ export default class TbAMap {
         var pinColor = settings.color.substr(1);
 
         var icon = new AMap.Icon({
-            image: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
+            image: 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + pinColor,
+            size: [21, 34]
         });
 
         var marker = new AMap.Marker({
@@ -220,19 +256,21 @@ export default class TbAMap {
 
     fitBounds(bounds) {
         console.log('fitbounds:', bounds);
-        if (this.dontFitMapBounds && this.defaultZoomLevel) {
-            this.map.setZoom(this.defaultZoomLevel);
-            console.log('地图中心：', bounds.getCenter());
-            let latLng = bounds.getCenter();
-            this.map.panTo(latLng);
-        } else {
-            AMap.event.addListenerOnce(this.map, 'zoomend', () => {
-                console.log('地图变化');
-                if (!this.defaultZoomLevel && this.map.getZoom() > this.minZoomLevel) {
-                    this.map.setZoom(this.minZoomLevel);
-                }
-            });
-            this.map.setBounds(bounds);
+        if (bounds.eb && bounds.mb) {
+            if (this.dontFitMapBounds && this.defaultZoomLevel) {
+                this.map.setZoom(this.defaultZoomLevel);
+                console.log('地图中心：', bounds.getCenter());
+                let latLng = bounds.getCenter();
+                this.map.panTo(latLng);
+            } else {
+                AMap.event.addListenerOnce(this.map, 'zoomend', () => {
+                    console.log('地图变化');
+                    if (!this.defaultZoomLevel && this.map.getZoom() > this.minZoomLevel) {
+                        this.map.setZoom(this.minZoomLevel);
+                    }
+                });
+                this.map.setBounds(bounds);
+            }
         }
     }
 
@@ -242,8 +280,8 @@ export default class TbAMap {
     }
 
     extendBoundsWithMarker(bounds, marker) {
-        console.log('extendBoundsWithMarker:', bounds, marker);
-        bounds.extend(marker.getPosition());
+        console.log('extendBoundsWithMarker:', bounds, marker.getPosition());
+        bounds.tbExtend(marker.getPosition());
     }
 
     getMarkerPosition(marker) {
@@ -267,14 +305,13 @@ export default class TbAMap {
     }
 
     createBounds() {
-        console.log('创建bounds:');
-        return this.map.getBounds();
+        return new AMap.Bounds(0, 0);
     }
 
     extendBounds(bounds, polyline) {
-        console.log('扩展bounds:', bounds, polyline);
+        console.log('扩展bounds:', bounds, polyline.getBounds());
         if (polyline && polyline.getPath()) {
-            bounds.extend(polyline.getBounds());
+            bounds.tbExtend(polyline.getBounds());
         }
     }
 
