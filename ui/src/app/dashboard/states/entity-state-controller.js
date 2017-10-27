@@ -315,6 +315,7 @@ export default function EntityStateController($scope, $timeout, $location, $stat
     }
 
     function gotoState(stateId, update, openRightLayout) {
+        // 显示dashboard详情
         vm.dashboardCtrl.openDashboardState(stateId, openRightLayout);
         if (update) {
             updateLocation();
